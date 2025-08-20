@@ -28,7 +28,18 @@
     </header>
 
     <main x-data="appState()" x-init="init()" class="max-w-7xl mx-auto px-4 py-4 grid grid-cols-12 gap-4">
-      <section id="visual-board" class="col-span-12 lg:col-span-7 bg-slate-900/60 border border-slate-800 rounded-xl overflow-hidden">
+      <!-- Global Tabs over entire content -->
+      <div class="col-span-12 flex items-center gap-2 px-3 pt-2 pb-1 border-b border-slate-800 bg-slate-900/80 rounded-t-xl">
+        <button @click="setTab('board')" :class="activeTab==='board' ? 'bg-slate-800 text-slate-100' : 'bg-transparent text-slate-400 hover:text-slate-200'" class="px-3 py-2 text-xs font-medium rounded">
+          Visual Board
+        </button>
+        <button @click="setTab('erd')" :class="activeTab==='erd' ? 'bg-slate-800 text-slate-100' : 'bg-transparent text-slate-400 hover:text-slate-200'" class="px-3 py-2 text-xs font-medium rounded">
+          ER Diagram
+        </button>
+      </div>
+      <template x-if="activeTab==='board'">
+        <section id="visual-board" class="col-span-12 lg:col-span-7 bg-slate-900/60 border border-slate-800 rounded-xl overflow-hidden">
+          <div>
         <h2 class="text-sm tracking-wide px-3 py-2 border-b border-slate-800 bg-slate-900/80">Visual Board: Categories, Products, Sellers, Customers, Orders</h2>
         <!-- Tiny Legend: cards → tables -->
         <div class="px-3 py-2 border-b border-slate-800 bg-slate-900/60 text-[11px] text-slate-400">
@@ -68,7 +79,8 @@
             </div>
           </div>
         </div>
-        <div class="grid grid-cols-1 gap-3 p-3" x-show="db">
+        <template x-if="db">
+          <div class="grid grid-cols-1 gap-3 p-3">
           <!-- Categories & Products lane -->
           <div class="col-span-1 border border-slate-800/80 rounded-lg p-3 bg-slate-900/40">
             <h3 class="text-xs text-slate-400 mb-2">Categories & Products</h3>
@@ -247,16 +259,22 @@
               </template>
             </div>
           </div>
-        </div>
-      </section>
+          </div>
+        </template>
+          </div>
+        </section>
+      </template>
 
+      <template x-if="activeTab==='board'">
       <aside id="entity-samples" class="col-span-12 lg:col-span-5 bg-slate-900/60 border border-slate-800 rounded-xl overflow-hidden">
         <h2 class="text-sm tracking-wide px-3 py-2 border-b border-slate-800 bg-slate-900/80">Entities: Example Records (JSON)</h2>
-        <div class="p-0 divide-y divide-slate-800" x-show="db">
-          <template x-for="name in sections" :key="name">
-            <pre class="m-0 p-3 bg-slate-950 overflow-auto max-h-[60vh]"><code class="text-[12px]" :id="name" x-text="formatSection(name)"></code></pre>
-          </template>
-        </div>
+        <template x-if="db">
+          <div class="p-0 divide-y divide-slate-800">
+            <template x-for="name in sections" :key="name">
+              <pre class="m-0 p-3 bg-slate-950 overflow-auto max-h-[60vh]"><code class="text-[12px]" :id="name" x-text="formatSection(name)"></code></pre>
+            </template>
+          </div>
+        </template>
         <div class="px-3 py-2 text-xs text-slate-400 border-t border-slate-800">
           Mapping notes:
           – PRODUCTS link to categories via PRODUCT_CATEGORIES.
@@ -264,19 +282,32 @@
           – ORDERS reference SELLERS, CUSTOMERS, and contain ORDER_ITEMS pointing to PRODUCT_VARIANTS.
         </div>
       </aside>
+      </template>
 
-      <section id="erd" class="col-span-12 bg-slate-900/60 border border-slate-800 rounded-xl overflow-hidden">
-        <h2 class="text-sm tracking-wide px-3 py-2 border-b border-slate-800 bg-slate-900/80">ER Diagram (Mermaid)</h2>
-        <div class="p-3 bg-slate-900/50">
-          <div id="erd-container" class="overflow-auto"></div>
-          <div class="mt-2 text-xs text-slate-400">Diagram loaded from mermaid/marketplace-erd-updated.mermaid and rendered client-side.</div>
-        </div>
-      </section>
+      <!-- Tab Pane: ER Diagram Full Width -->
+      <template x-if="activeTab==='erd'">
+        <section id="erd" class="col-span-12 bg-slate-900/60 border border-slate-800 rounded-xl overflow-hidden">
+          <h2 class="text-sm tracking-wide px-3 py-2 border-b border-slate-800 bg-slate-900/80">ER Diagram (Mermaid)</h2>
+          <div class="p-3 bg-slate-900/50">
+            <div class="flex items-center justify-between mb-2">
+              <div class="text-xs text-slate-400">Diagram loaded from mermaid/marketplace-erd-updated.mermaid</div>
+              <div class="flex items-center gap-1">
+                <button class="px-2 py-1 text-[11px] rounded border border-slate-700 bg-slate-800 hover:bg-slate-700" @click="erdZoomOut && erdZoomOut()" title="Zoom out">−</button>
+                <button class="px-2 py-1 text-[11px] rounded border border-slate-700 bg-slate-800 hover:bg-slate-700" @click="erdZoomIn && erdZoomIn()" title="Zoom in">+</button>
+                <button class="px-2 py-1 text-[11px] rounded border border-slate-700 bg-slate-800 hover:bg-slate-700" @click="erdFit && erdFit()" title="Fit to view">Fit</button>
+                <button class="px-2 py-1 text-[11px] rounded border border-slate-700 bg-slate-800 hover:bg-slate-700" @click="erdReset && erdReset()" title="Reset">Reset</button>
+              </div>
+            </div>
+            <div id="erd-container" class="overflow-auto" style="height: calc(100vh - 250px);"></div>
+          </div>
+        </section>
+      </template>
     </main>
 
     <!-- Alpine + Mermaid (client-side rendering). Using CDN so the page stays static. -->
     <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script src="https://unpkg.com/svg-pan-zoom@3.6.1/dist/svg-pan-zoom.min.js"></script>
     <script src="js/app.js"></script>
   </body>
   </html>
