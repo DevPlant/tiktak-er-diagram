@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Marketplace ERD – Visual Board and Sample Data</title>
+    <meta name="description" content="Visual explanation of the marketplace ER model with example data and entity mapping." />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: { slate: { 950: '#0b0c10' } }
+          }
+        }
+      }
+    </script>
+  </head>
+  <body class="bg-slate-950 text-slate-100">
+    <header class="sticky top-0 z-10 border-b border-slate-800 bg-gradient-to-b from-slate-950/95 to-slate-950/80 backdrop-blur">
+      <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
+        <div>
+          <h1 class="text-base font-semibold tracking-wide">Marketplace Data Board</h1>
+          <p class="text-xs text-slate-400">Example data mapped to the ER model with a split visual/data view.</p>
+        </div>
+        <div class="text-xs text-slate-400">Tip: Click entity labels to jump to JSON.</div>
+      </div>
+    </header>
+
+    <main x-data="appState()" x-init="init()" class="max-w-7xl mx-auto px-4 py-4 grid grid-cols-12 gap-4">
+      <section id="visual-board" class="col-span-12 lg:col-span-7 bg-slate-900/60 border border-slate-800 rounded-xl overflow-hidden">
+        <h2 class="text-sm tracking-wide px-3 py-2 border-b border-slate-800 bg-slate-900/80">Visual Board: Categories, Products, Sellers, Customers, Orders</h2>
+        <!-- Tiny Legend: cards → tables -->
+        <div class="px-3 py-2 border-b border-slate-800 bg-slate-900/60 text-[11px] text-slate-400">
+          <div class="flex flex-wrap gap-x-4 gap-y-1">
+            <div>
+              <span class="text-slate-300">Categories & Products</span>
+              → <a class="section-link text-sky-400 hover:underline" href="#CATEGORIES">CATEGORIES</a>,
+              <a class="section-link text-sky-400 hover:underline" href="#PRODUCTS">PRODUCTS</a>,
+              <a class="section-link text-sky-400 hover:underline" href="#PRODUCT_CATEGORIES">PRODUCT_CATEGORIES</a>
+            </div>
+            <div>
+              <span class="text-slate-300">Sellers</span>
+              → <a class="section-link text-sky-400 hover:underline" href="#SELLERS">SELLERS</a>,
+              <a class="section-link text-sky-400 hover:underline" href="#PRODUCT_VARIANTS">PRODUCT_VARIANTS</a>
+            </div>
+            <div>
+              <span class="text-slate-300">Variants</span>
+              → <a class="section-link text-sky-400 hover:underline" href="#PRODUCT_VARIANTS">PRODUCT_VARIANTS</a>,
+              <a class="section-link text-sky-400 hover:underline" href="#INVENTORY">INVENTORY</a>
+            </div>
+            <div>
+              <span class="text-slate-300">Promotions</span>
+              → <a class="section-link text-sky-400 hover:underline" href="#PROMOTIONS">PROMOTIONS</a>,
+              <a class="section-link text-sky-400 hover:underline" href="#PROMOTION_RULES">PROMOTION_RULES</a>,
+              <a class="section-link text-sky-400 hover:underline" href="#ORDER_ITEM_PROMOTIONS">ORDER_ITEM_PROMOTIONS</a>
+            </div>
+            <div>
+              <span class="text-slate-300">Cart Items</span>
+              → <a class="section-link text-sky-400 hover:underline" href="#CART_ITEMS">CART_ITEMS</a>,
+              <a class="section-link text-sky-400 hover:underline" href="#CART_ITEM_DISCOUNTS">CART_ITEM_DISCOUNTS</a>
+            </div>
+            <div>
+              <span class="text-slate-300">Customers & Orders</span>
+              → <a class="section-link text-sky-400 hover:underline" href="#CUSTOMERS">CUSTOMERS</a>,
+              <a class="section-link text-sky-400 hover:underline" href="#ORDERS">ORDERS</a>,
+              <a class="section-link text-sky-400 hover:underline" href="#ORDER_ITEMS">ORDER_ITEMS</a>
+            </div>
+          </div>
+        </div>
+        <div class="grid grid-cols-1 gap-3 p-3" x-show="db">
+          <!-- Categories & Products lane -->
+          <div class="col-span-1 border border-slate-800/80 rounded-lg p-3 bg-slate-900/40">
+            <h3 class="text-xs text-slate-400 mb-2">Categories & Products</h3>
+            <div class="grid gap-2">
+              <div class="bg-slate-900/70 border border-slate-800 rounded-lg p-3">
+                <div class="text-sm font-semibold flex items-center gap-2">Category Tree <a class="section-link text-sky-400 hover:underline text-[11px]" href="#CATEGORIES">CATEGORIES</a></div>
+                <div class="mt-2 grid gap-1 text-xs text-slate-300">
+                  <template x-for="parent in db.CATEGORIES.filter(c => !c.parent_id)" :key="parent.id">
+                    <div>
+                      <span class="font-semibold text-slate-100" x-text="parent.name"></span>
+                      <template x-if="db.CATEGORIES.some(c => c.parent_id === parent.id)">
+                        <span> → <span x-text="db.CATEGORIES.filter(c => c.parent_id === parent.id).map(c => c.name).join(', ')"></span></span>
+                      </template>
+                    </div>
+                  </template>
+                </div>
+                <div class="mt-2 text-xs text-slate-400">Products belong to categories via <a class="section-link text-sky-400 hover:underline" href="#PRODUCT_CATEGORIES">PRODUCT_CATEGORIES</a>.</div>
+              </div>
+
+              <div class="grid grid-cols-1 gap-2">
+                <template x-for="p in db.PRODUCTS" :key="p.id">
+                  <div class="bg-slate-900/70 border border-slate-800 rounded-lg p-3">
+                    <div class="text-sm font-semibold" x-text="p.name"></div>
+                    <div class="mt-2 grid gap-1 text-xs text-slate-300">
+                      <div><span class="font-semibold">Entity</span> <a class="section-link text-sky-400 hover:underline" href="#PRODUCTS">PRODUCTS</a></div>
+                      <div><span class="font-semibold">Brand</span> <span x-text="brandName(p.brand_id)"></span></div>
+                      <div><span class="font-semibold">Category</span> <span x-text="categoryPath(productCategories(p.id)[0])"></span></div>
+                      <div><span class="font-semibold">Status</span> <span class="inline-flex items-center px-2 py-0.5 text-[11px] rounded-full border border-emerald-400/40 text-emerald-300 bg-emerald-400/10" x-text="p.status"></span></div>
+                    </div>
+                  </div>
+                </template>
+              </div>
+
+              <div class="bg-slate-900/70 border border-slate-800 rounded-lg p-3">
+                <div class="text-sm font-semibold">Attributes</div>
+                <div class="mt-2 grid gap-1 text-xs text-slate-300">
+                  <div>
+                    <span class="font-semibold">Defined</span>
+                    <span x-text="(db.PRODUCT_ATTRIBUTES||[]).map(a=>a.name+ (a.level?` (${a.level})`:'' )).join(', ') || '—'"></span>
+                  </div>
+                  <div>
+                    <span class="font-semibold">Base</span>
+                    <span x-text="baseAttributesForProduct(db.PRODUCTS[0]?.id).map(x=>x.name+': '+x.value).join(', ') || '—'"></span>
+                  </div>
+                  <div>
+                    <span class="font-semibold">Variant</span>
+                    <span x-text="variantAttributesForVariant(db.PRODUCT_VARIANTS[5]?.id).map(x=>x.name+': '+x.value).join(', ') || '—'"></span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="bg-slate-900/70 border border-slate-800 rounded-lg p-3">
+                <div class="text-sm font-semibold">Product Images</div>
+                <div class="mt-2 grid gap-1 text-xs text-slate-300">
+                  <template x-for="p in db.PRODUCTS.slice(0,2)" :key="p.id">
+                    <div><span class="font-semibold" x-text="p.name"></span> — <span x-text="imagesForProduct(p.id).length"></span> images</div>
+                  </template>
+                </div>
+              </div>
+
+              <!-- Sellers (moved here; one per line) -->
+              <div class="bg-slate-900/70 border border-slate-800 rounded-lg p-3">
+                <div class="text-sm font-semibold mb-2">Sellers <a class="section-link text-sky-400 hover:underline text-[11px]" href="#SELLERS">SELLERS</a></div>
+                <div class="grid grid-cols-1 gap-2">
+                  <template x-for="s in db.SELLERS" :key="s.id">
+                    <div class="border border-slate-800 rounded p-2">
+                      <div class="text-sm font-semibold" x-text="s.name"></div>
+                      <div class="mt-1 text-xs text-slate-300">
+                        <div><span class="font-semibold">Status</span> <span class="inline-flex items-center px-2 py-0.5 text-[11px] rounded-full border border-emerald-400/40 text-emerald-300 bg-emerald-400/10" x-text="s.status"></span></div>
+                        <div class="mt-1"><span class="font-semibold">Variants</span> <span x-text="db.PRODUCT_VARIANTS.filter(v => v.seller_id === s.id).map(v => `${productName(v.product_id)} ($${v.price})`).join(', ')"></span></div>
+                      </div>
+                    </div>
+                  </template>
+                </div>
+              </div>
+
+              <!-- Variants (moved here; one per line) -->
+              <div class="bg-slate-900/70 border border-slate-800 rounded-lg p-3">
+                <div class="text-sm font-semibold flex items-center gap-2">Product Variants <a class="section-link text-sky-400 hover:underline text-[11px]" href="#PRODUCT_VARIANTS">PRODUCT_VARIANTS</a></div>
+                <div class="mt-2 grid gap-1 text-xs text-slate-300">
+                  <template x-for="v in db.PRODUCT_VARIANTS" :key="v.id">
+                    <div><span class="font-semibold text-slate-100" x-text="`${productName(v.product_id)} (${sellerName(v.seller_id)})`"></span> <span x-text="`sku: ${v.sku} · price: ${v.price}`"></span></div>
+                  </template>
+                </div>
+              </div>
+
+              <!-- Promotions -->
+              <div class="bg-slate-900/70 border border-slate-800 rounded-lg p-3">
+                <div class="text-sm font-semibold flex items-center gap-2">Promotions <a class="section-link text-sky-400 hover:underline text-[11px]" href="#PROMOTIONS">PROMOTIONS</a></div>
+                <div class="mt-2 grid gap-1 text-xs text-slate-300">
+                  <template x-for="pr in (db.PROMOTIONS || [])" :key="pr.id">
+                    <div><span class="font-semibold text-slate-100" x-text="pr.name"></span> — <span x-text="promotionSummary(pr)"></span></div>
+                  </template>
+                  <template x-if="!(db.PROMOTIONS && db.PROMOTIONS.length)">
+                    <div>No active promotions</div>
+                  </template>
+                </div>
+              </div>
+
+              <div class="bg-slate-900/70 border border-slate-800 rounded-lg p-3">
+                <div class="text-sm font-semibold flex items-center gap-2">Cart Items <a class="section-link text-sky-400 hover:underline text-[11px]" href="#CART_ITEMS">CART_ITEMS</a></div>
+                <div class="mt-2 grid gap-2 text-xs text-slate-300">
+                  <template x-for="cid in cartIds()" :key="cid">
+                    <div>
+                      <div class="font-semibold text-slate-200">Cart <span x-text="cid"></span></div>
+                      <template x-for="ci in cartItems(cid)" :key="ci.id">
+                        <div class="pl-2">- <span x-text="productName(db.PRODUCT_VARIANTS.find(v=>v.id===ci.variant_id)?.product_id)"></span> ×<span x-text="ci.quantity"></span> @ $<span x-text="ci.unit_price"></span>
+                          <template x-if="cartDiscountsForItem(ci.id).length">
+                            <span class="text-emerald-300"> (discounts: <span x-text="cartDiscountsForItem(ci.id).map(d=>d.description||'').filter(Boolean).join('; ')"></span>)</span>
+                          </template>
+                        </div>
+                      </template>
+                    </div>
+                  </template>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+          <!-- Customers & Orders lane -->
+          <div class="col-span-12 border border-slate-800/80 rounded-lg p-3 bg-slate-900/40">
+            <h3 class="text-xs text-slate-400 mb-2">Customers & Orders</h3>
+            <div class="grid md:grid-cols-3 gap-2">
+              <template x-for="cu in db.CUSTOMERS" :key="cu.id">
+                <div class="bg-slate-900/70 border border-slate-800 rounded-lg p-3">
+                  <div class="text-sm font-semibold flex items-center gap-2">
+                    <span x-text="cu.name"></span>
+                    <span class="text-[11px] text-slate-400">→
+                      <a class="section-link text-sky-400 hover:underline" href="#CUSTOMERS">CUSTOMERS</a>
+                    </span>
+                  </div>
+                  <div class="mt-2 grid gap-2 text-xs text-slate-300">
+                    <template x-if="!customerOrders(cu.id).length">
+                      <div><span class="font-semibold">Orders</span> — none</div>
+                    </template>
+
+                    <template x-for="o in customerOrders(cu.id)" :key="o.id">
+                      <div class="border border-slate-800 rounded p-2">
+                        <div class="flex items-center justify-between">
+                          <div>
+                            <span class="font-semibold">Order</span> <span x-text="o.id"></span>
+                            <span class="ml-2 text-slate-400">status:</span>
+                            <span class="inline-flex items-center px-2 py-0.5 text-[11px] rounded-full border border-emerald-400/40 text-emerald-300 bg-emerald-400/10" x-text="o.status"></span>
+                          </div>
+                          <div><span class="font-semibold">Total</span> $<span x-text="o.total.toFixed(2)"></span></div>
+                        </div>
+                        <div class="mt-2 text-[11px] text-slate-400">See: <a class="section-link text-sky-400 hover:underline" href="#ORDERS">ORDERS</a>, <a class="section-link text-sky-400 hover:underline" href="#ORDER_ITEMS">ORDER_ITEMS</a>, <a class="section-link text-sky-400 hover:underline" href="#ORDER_ITEM_PROMOTIONS">ORDER_ITEM_PROMOTIONS</a></div>
+
+                        <div class="mt-2 grid gap-1">
+                          <template x-for="oi in orderItems(o.id)" :key="oi.id">
+                            <div class="bg-slate-900/60 border border-slate-800 rounded p-2">
+                              <div class="flex items-start justify-between">
+                                <div>
+                                  <div class="font-semibold text-slate-200" x-text="productName(variantById(oi.variant_id)?.product_id)"></div>
+                                  <div class="text-[11px] text-slate-400">
+                                    SKU <span x-text="variantById(oi.variant_id)?.sku"></span>
+                                    · Seller <span x-text="sellerName(variantById(oi.variant_id)?.seller_id)"></span>
+                                  </div>
+                                </div>
+                                <div class="text-right">
+                                  <div>Qty × Price: <span x-text="oi.quantity"></span> × $<span x-text="oi.unit_price.toFixed(2)"></span></div>
+                                  <div class="font-semibold">Line: $<span x-text="oi.line_price.toFixed(2)"></span></div>
+                                </div>
+                              </div>
+                              <template x-if="orderItemPromotions(oi.id).length">
+                                <div class="mt-1 text-[11px] text-emerald-300">Applied: <span x-text="orderItemPromotions(oi.id).map(p => formatOrderItemPromotion(p)).join('; ')"></span></div>
+                              </template>
+                            </div>
+                          </template>
+                        </div>
+                      </div>
+                    </template>
+                  </div>
+                </div>
+              </template>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <aside id="entity-samples" class="col-span-12 lg:col-span-5 bg-slate-900/60 border border-slate-800 rounded-xl overflow-hidden">
+        <h2 class="text-sm tracking-wide px-3 py-2 border-b border-slate-800 bg-slate-900/80">Entities: Example Records (JSON)</h2>
+        <div class="p-0 divide-y divide-slate-800" x-show="db">
+          <template x-for="name in sections" :key="name">
+            <pre class="m-0 p-3 bg-slate-950 overflow-auto max-h-[60vh]"><code class="text-[12px]" :id="name" x-text="formatSection(name)"></code></pre>
+          </template>
+        </div>
+        <div class="px-3 py-2 text-xs text-slate-400 border-t border-slate-800">
+          Mapping notes:
+          – PRODUCTS link to categories via PRODUCT_CATEGORIES.
+          – Each PRODUCT can have multiple PRODUCT_VARIANTS per SELLER.
+          – ORDERS reference SELLERS, CUSTOMERS, and contain ORDER_ITEMS pointing to PRODUCT_VARIANTS.
+        </div>
+      </aside>
+
+      <section id="erd" class="col-span-12 bg-slate-900/60 border border-slate-800 rounded-xl overflow-hidden">
+        <h2 class="text-sm tracking-wide px-3 py-2 border-b border-slate-800 bg-slate-900/80">ER Diagram (Mermaid)</h2>
+        <div class="p-3 bg-slate-900/50">
+          <div id="erd-container" class="overflow-auto"></div>
+          <div class="mt-2 text-xs text-slate-400">Diagram loaded from mermaid/marketplace-erd-updated.mermaid and rendered client-side.</div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Alpine + Mermaid (client-side rendering). Using CDN so the page stays static. -->
+    <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script src="js/app.js"></script>
+  </body>
+  </html>

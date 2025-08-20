@@ -1,0 +1,168 @@
+{
+  "CATEGORIES": [
+    { "id": "c1", "parent_id": null, "name": "Beverages", "slug": "beverages", "description": "Drinks and refreshments", "image_id": null, "is_active": true, "sort_order": 1 },
+    { "id": "c2", "parent_id": "c1", "name": "Beers", "slug": "beers", "description": "All beer styles", "image_id": null, "is_active": true, "sort_order": 1 },
+    { "id": "c3", "parent_id": "c2", "name": "Craft Beers", "slug": "craft-beers", "description": "Independent craft beers", "image_id": null, "is_active": true, "sort_order": 2 },
+    { "id": "c4", "parent_id": "c2", "name": "Non-Alcoholic Beers", "slug": "non-alcoholic-beers", "description": "0.0% and low-alcohol beers", "image_id": null, "is_active": true, "sort_order": 3 },
+    { "id": "c5", "parent_id": "c1", "name": "Soft Drinks", "slug": "soft-drinks", "description": "Sodas and soft drinks", "image_id": null, "is_active": true, "sort_order": 4 }
+  ],
+  "BRANDS": [
+    { "id": "b1", "name": "Heineken", "slug": "heineken", "description": "Heineken brand", "image_id": null },
+    { "id": "b2", "name": "Peroni", "slug": "peroni", "description": "Peroni brand", "image_id": null },
+    { "id": "b3", "name": "LocalCraft", "slug": "localcraft", "description": "Independent craft brewery", "image_id": null },
+    { "id": "b4", "name": "ColaCo", "slug": "colaco", "description": "Cola beverages", "image_id": null },
+    { "id": "b5", "name": "Sparkle", "slug": "sparkle", "description": "Sparkling soft drinks", "image_id": null }
+  ],
+  "PRODUCTS": [
+    { "id": "p1", "brand_id": "b1", "name": "Heineken Lager 330ml (6-pack)", "slug": "heineken-lager-330ml-6pk", "description": "Classic lager, 6 x 330ml bottles", "status": "active", "type": "standard" },
+    { "id": "p2", "brand_id": "b2", "name": "Peroni Nastro Azzurro 330ml (6-pack)", "slug": "peroni-330ml-6pk", "description": "Italian lager, 6 x 330ml bottles", "status": "active", "type": "standard" },
+    { "id": "p3", "brand_id": "b3", "name": "LocalCraft IPA 440ml (can)", "slug": "localcraft-ipa-440ml", "description": "Hoppy IPA, 440ml can", "status": "active", "type": "standard" },
+    { "id": "p4", "brand_id": "b1", "name": "Heineken 0.0 330ml (6-pack)", "slug": "heineken-00-330ml-6pk", "description": "Non-alcoholic lager, 6 x 330ml bottles", "status": "active", "type": "standard" },
+    { "id": "p5", "brand_id": "b4", "name": "ColaCo Classic 330ml (6-pack)", "slug": "colaco-classic-330ml-6pk", "description": "Classic cola, 6 x 330ml cans", "status": "active", "type": "standard" },
+    { "id": "p6", "brand_id": "b5", "name": "Sparkle Lemon Soda 330ml (6-pack)", "slug": "sparkle-lemon-330ml-6pk", "description": "Lemon soda, 6 x 330ml cans", "status": "active", "type": "standard" },
+    { "id": "p7", "brand_id": "b4", "name": "ColaCo Zero Sugar 330ml (6-pack)", "slug": "colaco-zero-330ml-6pk", "description": "Zero sugar cola, 6 x 330ml cans", "status": "active", "type": "standard" }
+  ],
+  "PRODUCT_CATEGORIES": [
+    { "product_id": "p1", "category_id": "c2" },
+    { "product_id": "p2", "category_id": "c2" },
+    { "product_id": "p3", "category_id": "c3" },
+    { "product_id": "p4", "category_id": "c4" },
+    { "product_id": "p5", "category_id": "c5" },
+    { "product_id": "p6", "category_id": "c5" },
+    { "product_id": "p7", "category_id": "c5" }
+  ],
+  "USERS": [
+    { "id": "u1", "email": "alice@example.com", "password_hash": "...", "type": "customer", "created_at": "2025-01-10T10:00:00Z" },
+    { "id": "u2", "email": "bob@example.com", "password_hash": "...", "type": "customer", "created_at": "2025-01-11T11:00:00Z" },
+    { "id": "u3", "email": "carol@example.com", "password_hash": "...", "type": "customer", "created_at": "2025-01-12T12:00:00Z" },
+    { "id": "u4", "email": "city@bottleshop.com", "password_hash": "...", "type": "seller", "created_at": "2025-01-08T09:00:00Z" },
+    { "id": "u5", "email": "warehouse@beer.com", "password_hash": "...", "type": "seller", "created_at": "2025-01-08T09:30:00Z" },
+    { "id": "u6", "email": "soda@depot.com", "password_hash": "...", "type": "seller", "created_at": "2025-01-09T08:00:00Z" },
+    { "id": "u7", "email": "admin@platform.com", "password_hash": "...", "type": "platform_admin", "created_at": "2025-01-01T00:00:00Z" }
+  ],
+  "CUSTOMERS": [
+    { "id": "cu1", "user_id": "u1", "name": "Alice Johnson", "phone": "+1 555-0101", "status": "active" },
+    { "id": "cu2", "user_id": "u2", "name": "Bob Smith", "phone": "+1 555-0102", "status": "active" },
+    { "id": "cu3", "user_id": "u3", "name": "Carol Lee", "phone": "+1 555-0103", "status": "active" }
+  ],
+  "SELLERS": [
+    { "id": "s1", "user_id": "u4", "name": "City Bottle Shop", "status": "active" },
+    { "id": "s2", "user_id": "u5", "name": "Beer Warehouse", "status": "active" },
+    { "id": "s3", "user_id": "u6", "name": "Soda Depot", "status": "active" }
+  ],
+  "PRODUCT_VARIANTS": [
+    { "id": "v1", "product_id": "p1", "seller_id": "s1", "sku": "BEER-CBS-HEI-330-6", "barcode": "100000000001", "price": 9.99, "compare_at_price": 11.49, "cost": 7.50, "weight": 2.10, "status": "active" },
+    { "id": "v2", "product_id": "p2", "seller_id": "s1", "sku": "BEER-CBS-PER-330-6", "barcode": "100000000002", "price": 10.49, "compare_at_price": 11.99, "cost": 7.90, "weight": 2.10, "status": "active" },
+    { "id": "v3", "product_id": "p3", "seller_id": "s2", "sku": "BEER-BW-LCIPA-440", "barcode": "100000000003", "price": 3.49, "compare_at_price": 3.99, "cost": 2.20, "weight": 0.50, "status": "active" },
+    { "id": "v4", "product_id": "p4", "seller_id": "s1", "sku": "BEER-CBS-HEI00-330-6", "barcode": "100000000004", "price": 8.99, "compare_at_price": 10.49, "cost": 6.80, "weight": 2.10, "status": "active" },
+    { "id": "v5", "product_id": "p5", "seller_id": "s3", "sku": "SODA-SD-COLA-330-6", "barcode": "200000000001", "price": 4.99, "compare_at_price": 5.99, "cost": 3.20, "weight": 2.10, "status": "active" },
+    { "id": "v6", "product_id": "p6", "seller_id": "s3", "sku": "SODA-SD-LEM-330-6", "barcode": "200000000002", "price": 4.49, "compare_at_price": 5.49, "cost": 2.90, "weight": 2.10, "status": "active" },
+    { "id": "v7", "product_id": "p7", "seller_id": "s3", "sku": "SODA-SD-COLA0-330-6", "barcode": "200000000003", "price": 4.99, "compare_at_price": 5.99, "cost": 3.20, "weight": 2.10, "status": "active" }
+  ],
+  "PRODUCT_IMAGES": [
+    { "id": "img1", "product_id": "p1", "variant_id": null, "image_id": "heineken-6pk-1.jpg", "sort_order": 1, "is_primary": true },
+    { "id": "img2", "product_id": "p1", "variant_id": null, "image_id": "heineken-6pk-2.jpg", "sort_order": 2, "is_primary": false },
+    { "id": "img3", "product_id": "p3", "variant_id": "v3", "image_id": "localcraft-ipa-440.jpg", "sort_order": 1, "is_primary": true }
+  ],
+  "PRODUCT_ATTRIBUTES": [
+    { "id": "attr1", "name": "Pack Size", "type": "string", "level": "product" },
+    { "id": "attr2", "name": "ABV", "type": "string", "level": "product" },
+    { "id": "attr3", "name": "Flavor", "type": "string", "level": "variant" }
+  ],
+  "PRODUCT_ATTRIBUTE_VALUES": [
+    { "id": "av1", "attribute_id": "attr1", "value": "6-pack" },
+    { "id": "av2", "attribute_id": "attr2", "value": "4.5%" },
+    { "id": "av3", "attribute_id": "attr3", "value": "Lemon" },
+    { "id": "av4", "attribute_id": "attr2", "value": "0.0%" }
+  ],
+  "PRODUCT_BASE_ATTRIBUTES": [
+    { "product_id": "p1", "attribute_value_id": "av1" },
+    { "product_id": "p2", "attribute_value_id": "av1" },
+    { "product_id": "p2", "attribute_value_id": "av2" },
+    { "product_id": "p4", "attribute_value_id": "av4" }
+  ],
+  "PRODUCT_VARIANT_ATTRIBUTES": [
+    { "variant_id": "v6", "attribute_value_id": "av3" }
+  ],
+  "INVENTORY": [
+    { "variant_id": "v1", "warehouse_id": "w1", "quantity_available": 50, "quantity_reserved": 4 },
+    { "variant_id": "v2", "warehouse_id": "w1", "quantity_available": 30, "quantity_reserved": 2 },
+    { "variant_id": "v3", "warehouse_id": "w2", "quantity_available": 120, "quantity_reserved": 5 },
+    { "variant_id": "v4", "warehouse_id": "w1", "quantity_available": 40, "quantity_reserved": 1 },
+    { "variant_id": "v5", "warehouse_id": "w1", "quantity_available": 80, "quantity_reserved": 3 },
+    { "variant_id": "v6", "warehouse_id": "w1", "quantity_available": 75, "quantity_reserved": 2 },
+    { "variant_id": "v7", "warehouse_id": "w1", "quantity_available": 65, "quantity_reserved": 1 }
+  ],
+  "ADDRESSES": [
+    { "id": "a1", "line1": "10 Main St", "line2": null, "city": "Springfield", "state_province": "CA", "postal_code": "90001", "country_code": "US", "latitude": 34.0, "longitude": -118.2 },
+    { "id": "a2", "line1": "22 Pine Ave", "line2": "Apt 3A", "city": "Springfield", "state_province": "CA", "postal_code": "90002", "country_code": "US", "latitude": 34.0, "longitude": -118.2 },
+    { "id": "a3", "line1": "5 Market Rd", "line2": null, "city": "Springfield", "state_province": "CA", "postal_code": "90003", "country_code": "US", "latitude": 34.0, "longitude": -118.2 }
+  ],
+  "CUSTOMER_SHIPPING_ADDRESSES": [
+    { "id": "csa1", "customer_id": "cu1", "address_id": "a1", "name": "Alice Johnson", "phone": "+1 555-0101", "is_default": true },
+    { "id": "csa2", "customer_id": "cu2", "address_id": "a2", "name": "Bob Smith", "phone": "+1 555-0102", "is_default": true }
+  ],
+  "CUSTOMER_BILLING_ADDRESSES": [
+    { "id": "cba1", "customer_id": "cu1", "address_id": "a3", "type": "individual", "name": "Alice Johnson", "company_name": null, "vat_id": null, "is_default": true }
+  ],
+  "ORDERS": [
+    {
+      "id": "o1001",
+      "customer_id": "cu1",
+      "seller_id": "s1",
+      "status": "paid",
+      "subtotal": 9.99,
+      "discount_total": 0.00,
+      "tax_total": 1.00,
+      "shipping_total": 3.00,
+      "total": 13.99,
+      "delivery_address": { "ref": "csa1" },
+      "billing_address": { "ref": "csa1" },
+      "created_at": "2025-01-15T14:30:00Z"
+    },
+    {
+      "id": "o1002",
+      "customer_id": "cu2",
+      "seller_id": "s1",
+      "status": "paid",
+      "subtotal": 17.47,
+      "discount_total": 0.00,
+      "tax_total": 1.75,
+      "shipping_total": 3.00,
+      "total": 22.22,
+      "delivery_address": { "ref": "csa2" },
+      "billing_address": { "ref": "csa2" },
+      "created_at": "2025-01-16T10:00:00Z"
+    }
+  ],
+  "ORDER_ITEMS": [
+    { "id": "oi1001-1", "order_id": "o1001", "variant_id": "v1", "quantity": 1, "unit_price": 9.99, "line_price": 9.99, "discount_amount": 0.00, "original_price": 9.99, "item_snapshot": { "name": "Heineken Lager 330ml (6-pack)", "seller": "City Bottle Shop" } },
+    { "id": "oi1002-1", "order_id": "o1002", "variant_id": "v3", "quantity": 2, "unit_price": 3.49, "line_price": 6.98, "discount_amount": 0.00, "original_price": 3.49, "item_snapshot": { "name": "LocalCraft IPA 440ml (can)", "seller": "Beer Warehouse" } },
+    { "id": "oi1002-2", "order_id": "o1002", "variant_id": "v2", "quantity": 1, "unit_price": 10.49, "line_price": 10.49, "discount_amount": 0.00, "original_price": 10.49, "item_snapshot": { "name": "Peroni Nastro Azzurro 330ml (6-pack)", "seller": "City Bottle Shop" } }
+  ],
+  "ORDER_ITEM_PROMOTIONS": [
+    { "order_item_id": "oi1002-2", "promotion_id": "pr2", "promotion_snapshot": { "name": "10% off 12+ Beers" }, "discount_amount": 1.05 }
+  ],
+  "PROMOTIONS": [
+    { "id": "pr1", "seller_id": "s1", "name": "Buy 5 Get 1 (Heineken 6-pack)", "type": "buy_x_get_y", "status": "active", "valid_from": "2025-01-01T00:00:00Z", "valid_to": "2025-12-31T23:59:59Z", "priority": 10 },
+    { "id": "pr2", "seller_id": "s1", "name": "10% off 12+ Beers", "type": "threshold_percentage", "status": "active", "valid_from": "2025-01-01T00:00:00Z", "valid_to": "2025-12-31T23:59:59Z", "priority": 5 }
+  ],
+  "PROMOTION_RULES": [
+    { "id": "r1", "promotion_id": "pr1", "buy_quantity": 5, "get_quantity": 1, "buy_variant_id": "v1", "get_variant_id": "v1", "buy_category_id": null, "discount_percentage": 0.0, "discount_amount": 0.0, "max_uses_per_customer": 5, "max_uses_total": 1000 },
+    { "id": "r2", "promotion_id": "pr2", "buy_quantity": 12, "get_quantity": 0, "buy_variant_id": null, "get_variant_id": null, "buy_category_id": "c2", "discount_percentage": 10.0, "discount_amount": 0.0, "max_uses_per_customer": 10, "max_uses_total": 10000 }
+  ],
+  "PROMOTION_CONDITIONS": [
+    { "promotion_id": "pr2", "condition_type": "min_cart_quantity", "condition_value": "12" }
+  ],
+  "PLATFORM_ADMINS": [
+    { "id": "pa1", "user_id": "u7", "role": "superadmin", "permissions": ["manage_users", "view_all_orders", "manage_promotions"] }
+  ],
+  "CART_ITEMS": [
+    { "id": "ci1", "cart_id": "cart1", "variant_id": "v3", "quantity": 2, "unit_price": 3.49, "line_price": 6.98 },
+    { "id": "ci2", "cart_id": "cart1", "variant_id": "v2", "quantity": 1, "unit_price": 10.49, "line_price": 10.49 },
+    { "id": "ci3", "cart_id": "cart2", "variant_id": "v1", "quantity": 12, "unit_price": 9.99, "line_price": 119.88 }
+  ],
+  "CART_ITEM_DISCOUNTS": [
+    { "cart_item_id": "ci3", "promotion_id": "pr2", "discount_amount": 11.99, "discount_type": "percentage", "description": "10% off 12+ Beers" }
+  ]
+}

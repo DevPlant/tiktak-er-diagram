@@ -1,0 +1,279 @@
+erDiagram
+    %% Core Entities
+    CATEGORIES {
+        uuid id PK
+        uuid parent_id FK
+        string name
+        string slug
+        text description
+        string image_id
+        boolean is_active
+        int sort_order
+    }
+    
+    BRANDS {
+        uuid id PK
+        string name
+        string slug
+        text description
+        string image_id
+    }
+    
+    PRODUCTS {
+        uuid id PK
+        uuid brand_id FK
+        string name
+        string slug
+        text description
+        string status
+        string type
+    }
+    
+    PRODUCT_CATEGORIES {
+        uuid product_id FK
+        uuid category_id FK
+    }
+    
+    PRODUCT_VARIANTS {
+        uuid id PK
+        uuid product_id FK
+        uuid seller_id FK
+        string sku
+        string barcode
+        decimal price
+        decimal compare_at_price
+        decimal cost
+        decimal weight
+        string status
+    }
+    
+    INVENTORY {
+        uuid variant_id FK
+        int quantity_available
+        int quantity_reserved
+    }
+    
+    PRODUCT_IMAGES {
+        uuid id PK
+        uuid product_id FK
+        uuid variant_id FK
+        string image_id
+        int sort_order
+        boolean is_primary
+    }
+    
+    %% Product Attributes
+    PRODUCT_ATTRIBUTES {
+        uuid id PK
+        string name
+        string type
+        string level
+    }
+    
+    PRODUCT_ATTRIBUTE_VALUES {
+        uuid id PK
+        uuid attribute_id FK
+        string value
+    }
+    
+    PRODUCT_BASE_ATTRIBUTES {
+        uuid product_id FK
+        uuid attribute_value_id FK
+    }
+    
+    PRODUCT_VARIANT_ATTRIBUTES {
+        uuid variant_id FK
+        uuid attribute_value_id FK
+    }
+    
+    %% Promotions
+    PROMOTIONS {
+        uuid id PK
+        uuid seller_id FK
+        string name
+        string type
+        string status
+        datetime valid_from
+        datetime valid_to
+        int priority
+    }
+    
+    PROMOTION_RULES {
+        uuid id PK
+        uuid promotion_id FK
+        int buy_quantity
+        int get_quantity
+        uuid buy_variant_id FK
+        uuid get_variant_id FK
+        uuid buy_category_id FK
+        decimal discount_percentage
+        decimal discount_amount
+        int max_uses_per_customer
+        int max_uses_total
+    }
+    
+    PROMOTION_CONDITIONS {
+        uuid promotion_id FK
+        string condition_type
+        string condition_value
+    }
+    
+    %% Cart & Orders
+    CART_ITEMS {
+        uuid id PK
+        uuid cart_id FK
+        uuid variant_id FK
+        int quantity
+        decimal unit_price
+        decimal line_price
+    }
+    
+    CART_ITEM_DISCOUNTS {
+        uuid cart_item_id FK
+        uuid promotion_id FK
+        decimal discount_amount
+        string discount_type
+        string description
+    }
+    
+    ORDERS {
+        uuid id PK
+        uuid customer_id FK
+        uuid seller_id FK
+        string status
+        decimal subtotal
+        decimal discount_total
+        decimal tax_total
+        decimal shipping_total
+        decimal total
+        json delivery_address
+        json billing_address
+        datetime created_at
+    }
+    
+    ORDER_ITEMS {
+        uuid id PK
+        uuid order_id FK
+        uuid variant_id FK
+        int quantity
+        decimal unit_price
+        decimal line_price
+        decimal discount_amount
+        decimal original_price
+        json item_snapshot
+    }
+    
+    ORDER_ITEM_PROMOTIONS {
+        uuid order_item_id FK
+        uuid promotion_id FK
+        json promotion_snapshot
+        decimal discount_amount
+    }
+    
+    %% Users
+    USERS {
+        uuid id PK
+        string email
+        string password_hash
+        string type
+        datetime created_at
+    }
+    
+    CUSTOMERS {
+        uuid id PK
+        uuid user_id FK
+        string name
+        string phone
+        string status
+    }
+    
+    SELLERS {
+        uuid id PK
+        uuid user_id FK
+        string name
+        string status
+    }
+    
+    PLATFORM_ADMINS {
+        uuid id PK
+        uuid user_id FK
+        string role
+        json permissions
+    }
+    
+    %% Addresses
+    ADDRESSES {
+        uuid id PK
+        string line1
+        string line2
+        string city
+        string state_province
+        string postal_code
+        string country_code
+        decimal latitude
+        decimal longitude
+    }
+    
+    CUSTOMER_SHIPPING_ADDRESSES {
+        uuid id PK
+        uuid customer_id FK
+        uuid address_id FK
+        string name
+        string phone
+        boolean is_default
+    }
+    
+    CUSTOMER_BILLING_ADDRESSES {
+        uuid id PK
+        uuid customer_id FK
+        uuid address_id FK
+        string type
+        string name
+        string company_name
+        string vat_id
+        boolean is_default
+    }
+    
+    %% Relationships
+    CATEGORIES ||--o{ CATEGORIES : "parent"
+    BRANDS ||--o{ PRODUCTS : "has"
+    PRODUCTS ||--o{ PRODUCT_CATEGORIES : "belongs to"
+    CATEGORIES ||--o{ PRODUCT_CATEGORIES : "contains"
+    PRODUCTS ||--o{ PRODUCT_VARIANTS : "has"
+    SELLERS ||--o{ PRODUCT_VARIANTS : "sells"
+    PRODUCT_VARIANTS ||--|| INVENTORY : "tracks"
+    PRODUCTS ||--o{ PRODUCT_IMAGES : "has"
+    PRODUCT_VARIANTS ||--o{ PRODUCT_IMAGES : "has"
+    
+    PRODUCT_ATTRIBUTES ||--o{ PRODUCT_ATTRIBUTE_VALUES : "has"
+    PRODUCTS ||--o{ PRODUCT_BASE_ATTRIBUTES : "has"
+    PRODUCT_ATTRIBUTE_VALUES ||--o{ PRODUCT_BASE_ATTRIBUTES : "assigned"
+    PRODUCT_VARIANTS ||--o{ PRODUCT_VARIANT_ATTRIBUTES : "has"
+    PRODUCT_ATTRIBUTE_VALUES ||--o{ PRODUCT_VARIANT_ATTRIBUTES : "assigned"
+    
+    SELLERS ||--o{ PROMOTIONS : "creates"
+    PROMOTIONS ||--o{ PROMOTION_RULES : "has"
+    PROMOTIONS ||--o{ PROMOTION_CONDITIONS : "has"
+    PRODUCT_VARIANTS ||--o{ PROMOTION_RULES : "buy item"
+    PRODUCT_VARIANTS ||--o{ PROMOTION_RULES : "get item"
+    CATEGORIES ||--o{ PROMOTION_RULES : "applies to"
+    
+    PRODUCT_VARIANTS ||--o{ CART_ITEMS : "contains"
+    CART_ITEMS ||--o{ CART_ITEM_DISCOUNTS : "has"
+    PROMOTIONS ||--o{ CART_ITEM_DISCOUNTS : "applies"
+    
+    CUSTOMERS ||--o{ ORDERS : "places"
+    SELLERS ||--o{ ORDERS : "fulfills"
+    ORDERS ||--o{ ORDER_ITEMS : "contains"
+    PRODUCT_VARIANTS ||--o{ ORDER_ITEMS : "ordered"
+    ORDER_ITEMS ||--o{ ORDER_ITEM_PROMOTIONS : "has"
+    PROMOTIONS ||--o{ ORDER_ITEM_PROMOTIONS : "applied"
+    
+    USERS ||--|| CUSTOMERS : "is"
+    USERS ||--|| SELLERS : "is"
+    USERS ||--|| PLATFORM_ADMINS : "is"
+    
+    CUSTOMERS ||--o{ CUSTOMER_SHIPPING_ADDRESSES : "has"
+    CUSTOMERS ||--o{ CUSTOMER_BILLING_ADDRESSES : "has"
+    ADDRESSES ||--o{ CUSTOMER_SHIPPING_ADDRESSES : "used by"
+    ADDRESSES ||--o{ CUSTOMER_BILLING_ADDRESSES : "used by"
