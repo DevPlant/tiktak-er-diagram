@@ -36,6 +36,9 @@
         <button @click="setTab('erd')" :class="activeTab==='erd' ? 'bg-slate-800 text-slate-100' : 'bg-transparent text-slate-400 hover:text-slate-200'" class="px-3 py-2 text-xs font-medium rounded">
           ER Diagram
         </button>
+        <button @click="setTab('guide')" :class="activeTab==='guide' ? 'bg-slate-800 text-slate-100' : 'bg-transparent text-slate-400 hover:text-slate-200'" class="px-3 py-2 text-xs font-medium rounded">
+          Entity Guide
+        </button>
       </div>
       <template x-if="activeTab==='board'">
         <section id="visual-board" class="col-span-12 lg:col-span-7 bg-slate-900/60 border border-slate-800 rounded-xl overflow-hidden">
@@ -299,6 +302,124 @@
               </div>
             </div>
             <div id="erd-container" class="overflow-auto" style="height: calc(100vh - 250px);"></div>
+          </div>
+        </section>
+      </template>
+
+      <!-- Tab Pane: Entity Guide -->
+      <template x-if="activeTab==='guide'">
+        <section id="entity-guide" class="col-span-12 bg-slate-900/60 border border-slate-800 rounded-xl overflow-hidden">
+          <h2 class="text-sm tracking-wide px-3 py-2 border-b border-slate-800 bg-slate-900/80">Entities & Relationships – Guide</h2>
+          <div class="p-3 grid md:grid-cols-2 lg:grid-cols-3 gap-3 text-sm">
+            <div class="border border-slate-800 rounded-lg p-3 bg-slate-900/50">
+              <div class="font-semibold">📂 Categories</div>
+              <div class="text-xs text-slate-300 mt-1">Hierarchical taxonomy for products.</div>
+              <div class="text-[11px] text-slate-400 mt-2">Tables: <a class="section-link text-sky-400 hover:underline" href="#CATEGORIES">CATEGORIES</a>, <a class="section-link text-sky-400 hover:underline" href="#PRODUCT_CATEGORIES">PRODUCT_CATEGORIES</a></div>
+              <ul class="mt-2 text-xs text-slate-300 list-disc list-inside">
+                <li>Parent ↔ Child categories (self-reference)</li>
+                <li>Many-to-many: Categories ↔ Products via PRODUCT_CATEGORIES</li>
+              </ul>
+            </div>
+
+            <div class="border border-slate-800 rounded-lg p-3 bg-slate-900/50">
+              <div class="font-semibold">🛒 Products</div>
+              <div class="text-xs text-slate-300 mt-1">Sellable items; brand, images, attributes.</div>
+              <div class="text-[11px] text-slate-400 mt-2">Tables: <a class="section-link text-sky-400 hover:underline" href="#PRODUCTS">PRODUCTS</a>, <a class="section-link text-sky-400 hover:underline" href="#BRANDS">BRANDS</a>, <a class="section-link text-sky-400 hover:underline" href="#PRODUCT_IMAGES">PRODUCT_IMAGES</a></div>
+              <ul class="mt-2 text-xs text-slate-300 list-disc list-inside">
+                <li>Brand 1→N Products</li>
+                <li>Product 1→N Images</li>
+                <li>Product M↔N Categories via PRODUCT_CATEGORIES</li>
+              </ul>
+            </div>
+
+            <div class="border border-slate-800 rounded-lg p-3 bg-slate-900/50">
+              <div class="font-semibold">🔢 Variants & Inventory</div>
+              <div class="text-xs text-slate-300 mt-1">Seller-specific SKUs with price/stock.</div>
+              <div class="text-[11px] text-slate-400 mt-2">Tables: <a class="section-link text-sky-400 hover:underline" href="#PRODUCT_VARIANTS">PRODUCT_VARIANTS</a>, <a class="section-link text-sky-400 hover:underline" href="#INVENTORY">INVENTORY</a></div>
+              <ul class="mt-2 text-xs text-slate-300 list-disc list-inside">
+                <li>Product 1→N Variants</li>
+                <li>Seller 1→N Variants</li>
+                <li>Variant 1→1 Inventory snapshot</li>
+              </ul>
+            </div>
+
+            <div class="border border-slate-800 rounded-lg p-3 bg-slate-900/50">
+              <div class="font-semibold">🏬 Sellers</div>
+              <div class="text-xs text-slate-300 mt-1">Merchants listing and fulfilling variants.</div>
+              <div class="text[11px] text-slate-400 mt-2">Tables: <a class="section-link text-sky-400 hover:underline" href="#SELLERS">SELLERS</a></div>
+              <ul class="mt-2 text-xs text-slate-300 list-disc list-inside">
+                <li>Seller 1→N Product Variants</li>
+                <li>Seller 1→N Orders (as fulfilling party)</li>
+              </ul>
+            </div>
+
+            <div class="border border-slate-800 rounded-lg p-3 bg-slate-900/50">
+              <div class="font-semibold">⚙️ Attributes</div>
+              <div class="text-xs text-slate-300 mt-1">Describes products globally and per-variant.</div>
+              <div class="text-[11px] text-slate-400 mt-2">Tables: <a class="section-link text-sky-400 hover:underline" href="#PRODUCT_ATTRIBUTES">PRODUCT_ATTRIBUTES</a>, <a class="section-link text-sky-400 hover:underline" href="#PRODUCT_ATTRIBUTE_VALUES">PRODUCT_ATTRIBUTE_VALUES</a>, <a class="section-link text-sky-400 hover:underline" href="#PRODUCT_BASE_ATTRIBUTES">PRODUCT_BASE_ATTRIBUTES</a>, <a class="section-link text-sky-400 hover:underline" href="#PRODUCT_VARIANT_ATTRIBUTES">PRODUCT_VARIANT_ATTRIBUTES</a></div>
+              <ul class="mt-2 text-xs text-slate-300 list-disc list-inside">
+                <li>Base attributes apply to Product</li>
+                <li>Variant attributes apply to Variant</li>
+              </ul>
+            </div>
+
+            <div class="border border-slate-800 rounded-lg p-3 bg-slate-900/50">
+              <div class="font-semibold">🧍 Users & Customers</div>
+              <div class="text-xs text-slate-300 mt-1">End users and their customer profiles.</div>
+              <div class="text-[11px] text-slate-400 mt-2">Tables: <a class="section-link text-sky-400 hover:underline" href="#USERS">USERS</a>, <a class="section-link text-sky-400 hover:underline" href="#CUSTOMERS">CUSTOMERS</a></div>
+              <ul class="mt-2 text-xs text-slate-300 list-disc list-inside">
+                <li>User 1→1 Customer (buyer profile)</li>
+              </ul>
+            </div>
+
+            <div class="border border-slate-800 rounded-lg p-3 bg-slate-900/50">
+              <div class="font-semibold">🧭 Addresses</div>
+              <div class="text-xs text-slate-300 mt-1">Shipping and billing associations.</div>
+              <div class="text-[11px] text-slate-400 mt-2">Tables: <a class="section-link text-sky-400 hover:underline" href="#ADDRESSES">ADDRESSES</a>, <a class="section-link text-sky-400 hover:underline" href="#CUSTOMER_SHIPPING_ADDRESSES">CUSTOMER_SHIPPING_ADDRESSES</a>, <a class="section-link text-sky-400 hover:underline" href="#CUSTOMER_BILLING_ADDRESSES">CUSTOMER_BILLING_ADDRESSES</a></div>
+              <ul class="mt-2 text-xs text-slate-300 list-disc list-inside">
+                <li>Customer M↔N Addresses via link tables</li>
+              </ul>
+            </div>
+
+            <div class="border border-slate-800 rounded-lg p-3 bg-slate-900/50">
+              <div class="font-semibold">🧾 Orders</div>
+              <div class="text-xs text-slate-300 mt-1">Purchase records with line items.</div>
+              <div class="text-[11px] text-slate-400 mt-2">Tables: <a class="section-link text-sky-400 hover:underline" href="#ORDERS">ORDERS</a>, <a class="section-link text-sky-400 hover:underline" href="#ORDER_ITEMS">ORDER_ITEMS</a></div>
+              <ul class="mt-2 text-xs text-slate-300 list-disc list-inside">
+                <li>Customer 1→N Orders</li>
+                <li>Order 1→N Order Items</li>
+                <li>Order Item N→1 Product Variant</li>
+              </ul>
+            </div>
+
+            <div class="border border-slate-800 rounded-lg p-3 bg-slate-900/50">
+              <div class="font-semibold">🏷️ Promotions</div>
+              <div class="text-xs text-slate-300 mt-1">Discounts applied by rules/conditions.</div>
+              <div class="text-[11px] text-slate-400 mt-2">Tables: <a class="section-link text-sky-400 hover:underline" href="#PROMOTIONS">PROMOTIONS</a>, <a class="section-link text-sky-400 hover:underline" href="#PROMOTION_RULES">PROMOTION_RULES</a>, <a class="section-link text-sky-400 hover:underline" href="#PROMOTION_CONDITIONS">PROMOTION_CONDITIONS</a>, <a class="section-link text-sky-400 hover:underline" href="#ORDER_ITEM_PROMOTIONS">ORDER_ITEM_PROMOTIONS</a></div>
+              <ul class="mt-2 text-xs text-slate-300 list-disc list-inside">
+                <li>Promotion 1→N Rules → N Conditions</li>
+                <li>Applied at item level via ORDER_ITEM_PROMOTIONS</li>
+              </ul>
+            </div>
+
+            <div class="border border-slate-800 rounded-lg p-3 bg-slate-900/50">
+              <div class="font-semibold">🧺 Cart</div>
+              <div class="text-xs text-slate-300 mt-1">Pre-checkout items and discounts.</div>
+              <div class="text-[11px] text-slate-400 mt-2">Tables: <a class="section-link text-sky-400 hover:underline" href="#CART_ITEMS">CART_ITEMS</a>, <a class="section-link text-sky-400 hover:underline" href="#CART_ITEM_DISCOUNTS">CART_ITEM_DISCOUNTS</a></div>
+              <ul class="mt-2 text-xs text-slate-300 list-disc list-inside">
+                <li>Cart 1→N Items</li>
+                <li>Item 1→N Discounts (snapshots)</li>
+              </ul>
+            </div>
+
+            <div class="border border-slate-800 rounded-lg p-3 bg-slate-900/50">
+              <div class="font-semibold">👩‍💻 Admins</div>
+              <div class="text-xs text-slate-300 mt-1">Platform administrative users.</div>
+              <div class="text-[11px] text-slate-400 mt-2">Tables: <a class="section-link text-sky-400 hover:underline" href="#PLATFORM_ADMINS">PLATFORM_ADMINS</a></div>
+              <ul class="mt-2 text-xs text-slate-300 list-disc list-inside">
+                <li>Admins manage catalog, promos, and sellers</li>
+              </ul>
+            </div>
           </div>
         </section>
       </template>
